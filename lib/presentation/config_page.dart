@@ -88,13 +88,20 @@ class _ConfigPage extends ConsumerState<ConfigPage> {
                         },
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Row(
-                        children: [
-                          Icon(Icons.settings),
-                          Text(" salvar"),
-                        ],
+                    SizedBox(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person_2_rounded),
+                          hintText: "Topic:",
+                        ),
+                        controller: TextEditingController(
+                          text: ref.read(mqttTopicStateProvider),
+                        ),
+                        onChanged: (value) {
+                          ref
+                              .read(mqttTopicStateProvider.notifier)
+                              .update((state) => value);
+                        },
                       ),
                     ),
                   ],
@@ -112,3 +119,4 @@ final rtspStateProvider =
     StateProvider<String>((ref) => 'rtsp://10.7.129.102:8554/ds-test');
 final mqttBrokerStateProvider = StateProvider<String>((ref) => "10.7.129.102");
 final mqttPortStateProvider = StateProvider<String>((ref) => "1883");
+final mqttTopicStateProvider = StateProvider<String>((ref) => "/teste");
