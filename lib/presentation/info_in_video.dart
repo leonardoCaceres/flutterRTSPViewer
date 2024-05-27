@@ -1,6 +1,3 @@
-// import 'dart:convert';
-// import 'package:typed_data/typed_data.dart' as typed;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -18,7 +15,6 @@ class InfoInVideo extends ConsumerStatefulWidget {
 class _InfoInVideo extends ConsumerState<InfoInVideo> {
   bool _isOpen = false;
   MqttServerClient? client;
-  //List<MqttReceivedMessage<MqttMessage>> messages = [];
   String messages = '';
   @override
   void initState() {
@@ -31,12 +27,6 @@ class _InfoInVideo extends ConsumerState<InfoInVideo> {
     client = MqttServerClient.withPort(
         ref.read(mqttBrokerStateProvider), 'l2opassandfs', 1883);
     await client!.connect();
-    //client?.logging(on: true);
-    // String ping = "Connected from flutter!";
-    // List<int> byteList = utf8.encode(ping);
-    // typed.Uint8Buffer dataBuffer = typed.Uint8Buffer();
-    // dataBuffer.addAll(byteList);
-    // client?.publishMessage("/teste", MqttQos.atLeastOnce, dataBuffer);
     client?.subscribe(ref.read(mqttTopicStateProvider), MqttQos.exactlyOnce);
     client?.updates?.listen(
       _onMessageReceived,
@@ -47,10 +37,7 @@ class _InfoInVideo extends ConsumerState<InfoInVideo> {
     final MqttPublishMessage recMess = event[0].payload as MqttPublishMessage;
     final String message =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
-    print('MQTT Message received: $message');
     setState(() {
-      //messages.add(message);
       messages = message;
     });
   }
@@ -78,14 +65,6 @@ class _InfoInVideo extends ConsumerState<InfoInVideo> {
                         fontSize: 20,
                       ),
                     ),
-                    // const Text(
-                    //   "Suspeito1",
-                    //   style: TextStyle(fontSize: 14),
-                    // ),
-                    // const Text(
-                    //   "nome: Leonardo simoes",
-                    //   style: TextStyle(fontSize: 14),
-                    // ),
                   ],
                 ),
               )
